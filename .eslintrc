@@ -1,0 +1,119 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended", // Uses react-specific linting rules
+    "@react-native-community",
+    "plugin:prettier/recommended", // Enables eslint-plugin-prettier and eslint-config-prettier
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "useJSXTextNode": true,
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "modules": true,
+      "jsx": true
+    }
+  },
+  "globals": {
+    "devLog": "readonly",
+    "testID": "readonly"
+  },
+  "plugins": [
+    "react",
+    "import",
+    "react-hooks",
+    "@typescript-eslint",
+    "no-relative-import-paths"
+  ],
+  "rules": {
+    "no-relative-import-paths/no-relative-import-paths": [
+      "error",
+      { "allowSameFolder": true, "rootDir": "src" }
+    ],
+    "@typescript-eslint/no-shadow": "off",
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-ignore": "allow-with-description"
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "prefer-const": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      { "enableDangerousAutofixThisMayCauseInfiniteLoops": true }
+    ],
+    "import/no-named-as-default": "off",
+    "import/namespace": "off",
+    "import/no-unresolved": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal"],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "no-prototype-builtins": "off",
+    "react-native/no-unused-styles": "error",
+    "react-native/no-inline-styles": "off",
+    "no-unneeded-ternary": "error",
+    "no-nested-ternary": "error",
+    "no-negated-condition": "error",
+    "no-empty": "error",
+    "no-unused-expressions": "error",
+    "no-lone-blocks": "error",
+    "no-lonely-if": "error",
+    "no-constant-condition": "error",
+    "no-else-return": ["error", { "allowElseIf": false }],
+    "curly": "error",
+    "complexity": "off",
+    "max-depth": "error",
+    "max-lines": [
+      "error",
+      {
+        "max": 600,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "max-params": [
+      "error",
+      {
+        "max": 4
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
+  }
+}
