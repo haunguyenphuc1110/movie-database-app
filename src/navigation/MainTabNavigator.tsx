@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet } from 'react-native';
 
-import Icon from 'components/Icon';
+import Icon from 'components/icon';
 import MovieHomeScreen from 'features/home/view/MovieHomeScreen';
 import MovieWatchListScreen from 'features/watch-list/view/MovieWatchListScreen';
 import { BaseColors } from 'styles/colors';
+import { wScale } from 'utils/dimensions';
 
 import { ScreenNames } from './constants';
 
@@ -23,9 +25,7 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: BaseColors.darkBlue,
-        },
+        tabBarStyle: styles.tabBar,
       }}>
       <Tab.Screen
         name={ScreenNames.MovieHomeScreen}
@@ -48,5 +48,12 @@ const MainTabNavigator = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: BaseColors.darkBlue,
+    height: wScale(60),
+  },
+});
 
 export default MainTabNavigator;
