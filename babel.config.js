@@ -14,6 +14,8 @@ module.exports = {
           styles: './src/styles',
           utils: './src/utils',
           assets: './src/assets',
+          constants: './src/constants',
+          services: './src/services',
         },
       },
     ],

@@ -4,8 +4,8 @@ import { PortalHost, PortalProvider } from '@gorhom/portal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { PortalEnum } from 'constants/common';
 import MovieDetailsScreen from 'features/details/view/MovieDetailsScreen';
-import { PortalEnum } from 'types/common';
 
 import { ScreenNames } from './constants';
 import MainTabNavigator from './MainTabNavigator';
@@ -38,6 +38,7 @@ const AppNavigator = () => {
         <MainRouter />
         <PortalHost name={PortalEnum.BOTTOM_SHEET} />
         <PortalHost name={PortalEnum.DIALOG} />
+        <PortalHost name={PortalEnum.TOAST_MESSAGE} />
       </PortalProvider>
     </NavigationContainer>
   );
