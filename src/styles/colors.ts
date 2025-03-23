@@ -9,7 +9,7 @@ export const BaseColors = (() => {
   const info = '#0369A1';
   const warning = '#C2410C';
   const error = '#B91C1C';
-  const success = '#15803D';
+  const success = '#45FF8F';
 
   return {
     white,

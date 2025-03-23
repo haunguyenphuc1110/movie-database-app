@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { getMovies } from 'services/ApiService';
+import { fetchMovies } from 'services/ApiService';
 import { StorageKeys, storeDataToLocalStorage } from 'services/StorageService';
 import { Movie } from 'types/movie';
 
@@ -20,7 +20,7 @@ interface MovieHomeState {
   setSelectedSort: (sort: string) => void;
   setSearchValue: (value: string) => void;
   setError: (error: string) => void;
-  fetchMovies: () => Promise<void>;
+  handleFetchingMovies: () => Promise<void>;
   handleRefresh: () => void;
 }
 
@@ -72,14 +72,14 @@ const useMovieHomeStore = create<MovieHomeState>((set, get) => ({
       searchValue: '',
       page: 1,
     });
-    get().fetchMovies();
+    get().handleFetchingMovies();
   },
-  fetchMovies: async () => {
+  handleFetchingMovies: async () => {
     const { page, selectedCategory, movies, searchValue, selectedSort } = get();
     set({ loading: true });
 
     try {
-      const response = await getMovies({
+      const response = await fetchMovies({
         page,
         category: selectedCategory,
       });

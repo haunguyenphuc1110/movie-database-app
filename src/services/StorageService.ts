@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export enum StorageKeys {
   CATEGORY = '@movie_category',
   SORT_BY = '@movie_sort_by',
+  WATCH_LIST = '@movie_watch_list',
 }
 
 /**

@@ -23,3 +23,12 @@ export const delay = (duration: number) => {
     }, duration);
   });
 };
+
+export const convertMinsToHrsMins = (mins: number) => {
+  let h = Math.floor(mins / 60);
+  let m = mins % 60;
+  const formattedH = h < 10 ? '0' + h : h.toString();
+  const formattedM = m < 10 ? '0' + m : m.toString();
+
+  return `${formattedH}h ${formattedM}m`;
+};
