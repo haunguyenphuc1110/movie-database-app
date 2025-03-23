@@ -23,16 +23,28 @@ interface MovieHomeState {
   handleRefresh: () => void;
 }
 
+enum Category {
+  NOW_PLAYING = 'now_playing',
+  UPCOMING = 'upcoming',
+  POPULAR = 'popular',
+}
+
+enum SortBy {
+  TITLE = 'title',
+  RELEASE_DATE = 'release_date',
+  VOTE_COUNT = 'vote_count',
+}
+
 const useMovieHomeStore = create<MovieHomeState>((set, get) => ({
   categories: [
-    { label: 'Now Playing', value: 'now_playing' },
-    { label: 'Upcoming', value: 'upcoming' },
-    { label: 'Popular', value: 'popular' },
+    { label: 'Now Playing', value: Category.NOW_PLAYING },
+    { label: 'Upcoming', value: Category.UPCOMING },
+    { label: 'Popular', value: Category.POPULAR },
   ],
   sorts: [
-    { label: 'By alphabetical order', value: 'alphabetical_order' },
-    { label: 'By rating', value: 'rating' },
-    { label: 'By release date', value: 'release_date' },
+    { label: 'By alphabetical order', value: SortBy.TITLE },
+    { label: 'By rating', value: SortBy.VOTE_COUNT },
+    { label: 'By release date', value: SortBy.RELEASE_DATE },
   ],
   movies: [],
   page: 1,
@@ -56,7 +68,7 @@ const useMovieHomeStore = create<MovieHomeState>((set, get) => ({
     get().fetchMovies();
   },
   fetchMovies: async () => {
-    const { page, selectedCategory, movies, searchValue } = get();
+    const { page, selectedCategory, movies, searchValue, selectedSort } = get();
     set({ loading: true });
 
     try {
@@ -81,8 +93,30 @@ const useMovieHomeStore = create<MovieHomeState>((set, get) => ({
           )
         : updatedMovies;
 
+      // Apply sorting based on the selectedSort value
+      const sortedMovies = selectedSort
+        ? [...filteredMovies].sort((a, b) => {
+            if (selectedSort === SortBy.TITLE) {
+              return a.title.localeCompare(b.title);
+            }
+
+            if (selectedSort === SortBy.RELEASE_DATE) {
+              return (
+                new Date(b.release_date).getTime() -
+                new Date(a.release_date).getTime()
+              );
+            }
+
+            if (selectedSort === SortBy.VOTE_COUNT) {
+              return b.vote_count - a.vote_count;
+            }
+
+            return 0;
+          })
+        : filteredMovies;
+
       set({
-        movies: filteredMovies,
+        movies: sortedMovies,
         totalPages: response.total_pages ?? 1,
         loading: false,
       });

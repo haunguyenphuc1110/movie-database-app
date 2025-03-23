@@ -16,6 +16,11 @@ import Dropdown from 'components/dropdown/Dropdown';
 import SearchBar from 'components/search-bar/SearchBar';
 import Toast, { ToastType } from 'components/toast/Toast';
 import useMovieHomeStore from 'features/home/hooks/useMovieHomeStore';
+import {
+  readDataFromLocalStorage,
+  StorageKeys,
+  storeDataToLocalStorage,
+} from 'services/StorageService';
 import { BaseColors } from 'styles/colors';
 import AppStyles, { SPACING } from 'styles/styles';
 import { Movie } from 'types/movie';
@@ -26,6 +31,7 @@ import MovieItem from './components/MovieItem';
 
 const MovieHomeScreen = () => {
   const insets = useSafeAreaInsets();
+  const firstRender = React.useRef(true);
 
   const {
     movies,
@@ -48,7 +54,30 @@ const MovieHomeScreen = () => {
   } = useMovieHomeStore();
 
   useEffect(() => {
-    fetchMovies();
+    (async () => {
+      if (firstRender.current) {
+        const category = await readDataFromLocalStorage<string>(
+          StorageKeys.CATEGORY,
+        );
+        const sortBy = await readDataFromLocalStorage<string>(
+          StorageKeys.SORT_BY,
+        );
+        setSelectedCategory(category ?? 'now_playing');
+        setSelectedSort(sortBy ?? '');
+
+        fetchMovies();
+
+        firstRender.current = false;
+      }
+    })();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      fetchMovies();
+    }
   }, [fetchMovies, page]);
 
   const renderMovieItem = ({ item }: { item: Movie }) => {
@@ -78,7 +107,10 @@ const MovieHomeScreen = () => {
       <Dropdown
         selectedValue={selectedCategory}
         options={categories}
-        onValueChange={option => setSelectedCategory(option.value)}
+        onValueChange={async option => {
+          await storeDataToLocalStorage(StorageKeys.CATEGORY, option.value);
+          setSelectedCategory(option.value);
+        }}
         style={{ marginTop: SPACING }}>
         Category
       </Dropdown>
@@ -86,7 +118,10 @@ const MovieHomeScreen = () => {
       <Dropdown
         selectedValue={selectedSort}
         options={sorts}
-        onValueChange={option => setSelectedSort(option.value)}
+        onValueChange={async option => {
+          await storeDataToLocalStorage(StorageKeys.SORT_BY, option.value);
+          setSelectedSort(option.value);
+        }}
         style={styles.input}>
         Sort by
       </Dropdown>
