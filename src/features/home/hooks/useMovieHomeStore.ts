@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { getMovies } from 'services/ApiService';
+import { StorageKeys, storeDataToLocalStorage } from 'services/StorageService';
 import { Movie } from 'types/movie';
 
 interface MovieHomeState {
@@ -59,9 +60,15 @@ const useMovieHomeStore = create<MovieHomeState>((set, get) => ({
   setSelectedSort: sort => set({ selectedSort: sort }),
   setSearchValue: value => set({ searchValue: value }),
   setError: error => set({ error }),
-  handleRefresh: () => {
+  handleRefresh: async () => {
+    await storeDataToLocalStorage(
+      StorageKeys.CATEGORY,
+      get().categories[0].value,
+    );
+    await storeDataToLocalStorage(StorageKeys.SORT_BY, null);
     set({
       selectedCategory: get().categories[0].value,
+      selectedSort: '',
       searchValue: '',
       page: 1,
     });

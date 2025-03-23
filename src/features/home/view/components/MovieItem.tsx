@@ -21,6 +21,7 @@ const MovieItem: FC<Props> = ({ movie }) => {
         src={`${BASE_IMAGE_URL}${movie.poster_path}`}
         style={styles.image}
         resizeMode={'cover'}
+        resizeMethod={'resize'}
       />
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{movie.title}</Text>

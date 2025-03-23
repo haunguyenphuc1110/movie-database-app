@@ -202,6 +202,8 @@ const MovieHomeScreen = () => {
           </View>
         }
         keyExtractor={item => item.id + item.title}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={10}
         scrollEnabled={false}
         style={{ width: '100%' }}
         contentContainerStyle={{
