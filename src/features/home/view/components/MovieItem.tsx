@@ -3,6 +3,8 @@ import React, { FC } from 'react';
 import dayjs from 'dayjs';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import Button from 'components/button/Button';
+import Icon from 'components/icon/Icon';
 import { BASE_IMAGE_URL } from 'constants/common';
 import { ScreenNames } from 'navigation/constants';
 import { useNavigation } from 'navigation/NavigationService';
@@ -13,9 +15,11 @@ import { wScale } from 'utils/dimensions';
 
 type Props = {
   movie: Movie;
+  canRemove?: boolean;
+  onRemove?: () => void;
 };
 
-const MovieItem: FC<Props> = ({ movie }) => {
+const MovieItem: FC<Props> = ({ movie, canRemove, onRemove }) => {
   const navigation = useNavigation();
 
   return (
@@ -41,6 +45,19 @@ const MovieItem: FC<Props> = ({ movie }) => {
           {movie.overview}
         </Text>
       </View>
+      {canRemove && (
+        <Button
+          onPress={onRemove}
+          style={{
+            position: 'absolute',
+            top: SPACING / 2,
+            right: SPACING / 2,
+            paddingHorizontal: 0,
+            paddingVertical: 0,
+          }}>
+          <Icon name={'times'} size={wScale(16)} color={BaseColors.gray} />
+        </Button>
+      )}
     </TouchableOpacity>
   );
 };

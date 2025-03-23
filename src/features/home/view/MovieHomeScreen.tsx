@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import {
   ActivityIndicator,
@@ -76,9 +76,9 @@ const MovieHomeScreen = () => {
     }
   }, [handleFetchingMovies, page]);
 
-  const renderMovieItem = ({ item }: { item: Movie }) => {
+  const renderMovieItem = useCallback(({ item }: { item: Movie }) => {
     return <MovieItem movie={item} />;
-  };
+  }, []);
 
   return (
     <ScrollView

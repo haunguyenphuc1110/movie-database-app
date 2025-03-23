@@ -23,11 +23,17 @@ const MovieUserScore: FC<Props> = ({ movieCrews, movie }) => {
       crew => crew.known_for_department === 'Writing',
     );
 
-    if (directors.length === 0 && writers.length === 0) {
-      return [];
+    const crews = [];
+
+    if (directors.length > 0) {
+      crews.push(directors[0]);
     }
 
-    return [directors[0], writers[0]];
+    if (writers.length > 0) {
+      crews.push(writers[0]);
+    }
+
+    return crews;
   }, [movieCrews]);
 
   return (

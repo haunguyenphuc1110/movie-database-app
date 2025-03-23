@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import Button from 'components/button/Button';
 import Icon from 'components/icon';
+import Toast from 'components/toast';
 import { ParamList } from 'navigation/NavigationService';
 import {
   fetchMovieCrewsCasts,
@@ -36,6 +37,7 @@ const MovieDetailsScreen = () => {
   const [movieCrews, setMovieCrews] = useState<MovieCrew[]>([]);
   const [movieCasts, setMovieCasts] = useState<MovieCast[]>([]);
   const [recommendations, setRecommendations] = useState<Movie[]>([]);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (movieId) {
@@ -56,7 +58,8 @@ const MovieDetailsScreen = () => {
       return;
     }
     watchList.push(movieDetails as Movie);
-    storeDataToLocalStorage(StorageKeys.WATCH_LIST, watchList);
+    await storeDataToLocalStorage(StorageKeys.WATCH_LIST, watchList);
+    setShowToast(true);
   }, [movieDetails, movieId]);
 
   return (
@@ -91,6 +94,7 @@ const MovieDetailsScreen = () => {
       <MovieCastSection movieCasts={movieCasts} />
 
       <MovieRecommendationSection recommendations={recommendations} />
+      {showToast && <Toast message={'Added movie to watchlist successfully'} />}
     </ScrollView>
   );
 };
