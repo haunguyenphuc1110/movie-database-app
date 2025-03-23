@@ -8,9 +8,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import LogoSvg from 'assets/svgs/logo.svg';
 import Button from 'components/button';
 import Dropdown from 'components/dropdown/Dropdown';
 import SearchBar from 'components/search-bar/SearchBar';
@@ -25,12 +23,10 @@ import { BaseColors } from 'styles/colors';
 import AppStyles, { SPACING } from 'styles/styles';
 import { Movie } from 'types/movie';
 import { wScale } from 'utils/dimensions';
-import { isIOS } from 'utils/statusBar';
 
 import MovieItem from './components/MovieItem';
 
 const MovieHomeScreen = () => {
-  const insets = useSafeAreaInsets();
   const firstRender = React.useRef(true);
 
   const {
@@ -50,7 +46,7 @@ const MovieHomeScreen = () => {
     setSearchValue,
     setError,
     handleRefresh,
-    fetchMovies,
+    handleFetchingMovies,
   } = useMovieHomeStore();
 
   useEffect(() => {
@@ -65,7 +61,7 @@ const MovieHomeScreen = () => {
         setSelectedCategory(category ?? 'now_playing');
         setSelectedSort(sortBy ?? '');
 
-        fetchMovies();
+        handleFetchingMovies();
 
         firstRender.current = false;
       }
@@ -76,9 +72,9 @@ const MovieHomeScreen = () => {
 
   useEffect(() => {
     if (!firstRender.current) {
-      fetchMovies();
+      handleFetchingMovies();
     }
-  }, [fetchMovies, page]);
+  }, [handleFetchingMovies, page]);
 
   const renderMovieItem = ({ item }: { item: Movie }) => {
     return <MovieItem movie={item} />;
@@ -94,16 +90,8 @@ const MovieHomeScreen = () => {
         />
       }
       showsVerticalScrollIndicator={false}
-      style={[
-        AppStyles.flex1,
-        styles.scrollView,
-        {
-          paddingTop: isIOS ? insets.top : SPACING,
-        },
-      ]}
+      style={[AppStyles.flex1, styles.scrollView]}
       contentContainerStyle={AppStyles.center}>
-      <LogoSvg width={wScale(80)} height={wScale(50)} />
-
       <Dropdown
         selectedValue={selectedCategory}
         options={categories}
@@ -134,30 +122,19 @@ const MovieHomeScreen = () => {
         placeholderTextColor={BaseColors.lightGray}
         onClear={() => {
           setSearchValue('');
-          fetchMovies();
+          handleFetchingMovies();
         }}
         containerStyle={styles.input}
       />
 
       <Button
         textProps={{
-          style: {
-            fontWeight: '600',
-            fontSize: wScale(16),
-            opacity: 0.5,
-          },
+          style: styles.searchButtonLabel,
         }}
-        style={{
-          backgroundColor: BaseColors.lightGray,
-          borderRadius: wScale(40),
-          paddingVertical: SPACING / 2,
-          justifyContent: 'center',
-          width: '100%',
-          marginTop: SPACING / 2,
-        }}
+        style={styles.searchButton}
         onPress={() => {
           setPage(1);
-          fetchMovies();
+          handleFetchingMovies();
         }}>
         Search
       </Button>
@@ -178,18 +155,9 @@ const MovieHomeScreen = () => {
             {movies.length > 0 && !searchValue && (
               <Button
                 textProps={{
-                  style: {
-                    fontWeight: 'bold',
-                    fontSize: SPACING,
-                    color: BaseColors.white,
-                  },
+                  style: styles.loadMoreButtonLabel,
                 }}
-                style={{
-                  backgroundColor: BaseColors.lightBlue,
-                  borderRadius: wScale(5),
-                  paddingVertical: SPACING / 2,
-                  justifyContent: 'center',
-                }}
+                style={styles.loadMoreButton}
                 onPress={() => {
                   if (totalPages && page >= totalPages) {
                     return;
@@ -230,6 +198,30 @@ const styles = StyleSheet.create({
   input: {
     marginTop: SPACING / 2,
     color: BaseColors.black,
+  },
+  searchButton: {
+    backgroundColor: BaseColors.lightGray,
+    borderRadius: wScale(40),
+    paddingVertical: SPACING / 2,
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: SPACING / 2,
+  },
+  searchButtonLabel: {
+    fontWeight: '600',
+    fontSize: wScale(16),
+    opacity: 0.5,
+  },
+  loadMoreButton: {
+    backgroundColor: BaseColors.lightBlue,
+    borderRadius: wScale(5),
+    paddingVertical: SPACING / 2,
+    justifyContent: 'center',
+  },
+  loadMoreButtonLabel: {
+    fontWeight: 'bold',
+    fontSize: SPACING,
+    color: BaseColors.white,
   },
 });
 

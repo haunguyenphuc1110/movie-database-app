@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 
 import dayjs from 'dayjs';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import Image from 'components/image/Image';
 import { BASE_IMAGE_URL } from 'constants/common';
+import { ScreenNames } from 'navigation/constants';
+import { useNavigation } from 'navigation/NavigationService';
 import { BaseColors } from 'styles/colors';
 import AppStyles, { SPACING } from 'styles/styles';
 import { Movie } from 'types/movie';
@@ -15,10 +16,18 @@ type Props = {
 };
 
 const MovieItem: FC<Props> = ({ movie }) => {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity style={[AppStyles.rowCenter, styles.container]}>
+    <TouchableOpacity
+      style={[AppStyles.rowCenter, styles.container]}
+      onPress={() =>
+        navigation.navigate(ScreenNames.MovieDetailsScreen, {
+          movieId: movie.id,
+        })
+      }>
       <Image
-        src={`${BASE_IMAGE_URL}${movie.poster_path}`}
+        source={{ uri: `${BASE_IMAGE_URL}${movie.poster_path}` }}
         style={styles.image}
         resizeMode={'cover'}
         resizeMethod={'resize'}
